@@ -1,15 +1,15 @@
 package com.example.utils;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import com.google.gson.Gson;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
+
 
 /**
  * @author Lex
@@ -41,7 +41,7 @@ public class ExcelUtils {
                 }
             }
             // Write the workbook to a file
-            FileOutputStream fileOut = new FileOutputStream(new File(path));
+            FileOutputStream fileOut = new FileOutputStream(path);
             workbook.write(fileOut);
             fileOut.close();
             workbook.close();
@@ -49,5 +49,29 @@ public class ExcelUtils {
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static String excelToJson(String filepath) throws IOException {
+        FileInputStream inputStream = new FileInputStream(filepath);
+        Workbook workbook = new XSSFWorkbook(inputStream);
+        Sheet sheet = workbook.getSheetAt(0);
+        List<List<String>> data = new ArrayList<>();
+        Row header = sheet.getRow(0);
+        int numColumns = header.getLastCellNum();
+        for (int i = 0; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row == null) {
+                continue;
+            }
+            List<String> rowData = new ArrayList<>();
+            for (int j = 0; j < numColumns; j++) {
+                Cell cell = row.getCell(j, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                String cellValue = cell.toString();
+                rowData.add(cellValue);
+            }
+            data.add(rowData);
+        }
+        return new Gson().toJson(data);
     }
 }

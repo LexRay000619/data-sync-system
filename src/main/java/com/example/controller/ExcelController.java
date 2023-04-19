@@ -3,17 +3,24 @@ package com.example.controller;
 import com.example.utils.ExcelUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
+
 /**
  * @author Lex
  */
 @CrossOrigin(origins = {"*"})
 @RestController
 public class ExcelController {
-    @RequestMapping("/test")
+    @RequestMapping("/save")
     public String excel(@RequestBody String string) {
-        System.out.println(string);
-        String filename = "D:\\文件\\课程学习资料\\大四下学期\\毕业设计\\TestCases\\SheetJS\\excels\\tmp\\服务器端文件.xlsx";
+        String filename = "src/main/resources/static/excels/serverExcel.xlsx";
         ExcelUtils.convertStringToExcel(string, filename);
-        return "OK";
+        return "The Excel file is successfully saved on the server side.";
+    }
+
+    @GetMapping("/excel")
+    public String getString() throws IOException {
+        System.out.println("JSON string has been successfully sent to the client.");
+        return ExcelUtils.excelToJson("src/main/resources/static/excels/serverExcel.xlsx");
     }
 }
