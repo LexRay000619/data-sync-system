@@ -69,8 +69,10 @@
     });
 
     loadBtn.addEventListener('click',(event)=>{
+        document.getElementById('hot').innerHTML="";
+        
         let jsonData;
-        axios.get("http://localhost:8080/excel").then(result =>{
+        axios.get("http://localhost:8080/getJsonStringFromServer").then(result =>{
             console.log('The initial excel table data from the server side has been successfully obtained.');
             jsonData = result.data;
             hot = new Handsontable(document.getElementById('hot'), {
@@ -128,7 +130,7 @@
     }
 
     saveBtn.addEventListener('click',async()=>{
-        axios.post("http://localhost:8080/save",hot.getData()).then(result => {
+        axios.post("http://localhost:8080/saveExcelToServer",hot.getData()).then(result => {
 			console.log(result.data);
 		});
     });

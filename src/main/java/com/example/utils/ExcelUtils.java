@@ -45,7 +45,7 @@ public class ExcelUtils {
             workbook.write(fileOut);
             fileOut.close();
             workbook.close();
-            System.out.println("Excel file created and saved at " + path);
+            System.out.println(TimeUtils.getCurrentTime()+"Excel file created and saved at " + path);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
