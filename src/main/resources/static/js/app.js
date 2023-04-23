@@ -54,7 +54,8 @@ loadBtn.addEventListener('click',()=>{
     document.getElementById('hot').innerHTML="";
 
     let jsonData;
-    axios.get("http://localhost:8080/getJsonStringFromServer").then(result =>{
+    let ipAddr = window.location.hostname;
+    axios.get(`http://${ipAddr}:8080/getJsonStringFromServer`).then(result =>{
         console.log('The initial excel table data from the server side has been successfully obtained.');
         jsonData = result.data;
         hot = new Handsontable(document.getElementById('hot'), {
@@ -100,10 +101,10 @@ exportBtn.addEventListener('click', () => {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');    // 将工作表添加到工作簿
     const excelBuffer = XLSX.write(workbook, {bookType: 'xlsx', type: 'array'});    // 将工作簿以xlsx格式写入Excel缓冲区
-    saveExcelFile(excelBuffer, 'myWorkbook.xlsx');
+    exportAsExcelFile(excelBuffer, 'myWorkbook.xlsx');
 });
 
-function saveExcelFile(buffer, fileName) {
+function exportAsExcelFile(buffer, fileName) {
     const blob = new Blob([buffer], {type: 'application/octet-stream'});    // 从缓冲区创建一个Blob对象(二进制大对象)
     const url = window.URL.createObjectURL(blob);   // 为该blob创建一个临时的URL
     const anchor = document.createElement('a'); // 创建一个新的锚点元素作为其下载属性
@@ -116,7 +117,8 @@ function saveExcelFile(buffer, fileName) {
 }
 
 saveBtn.addEventListener('click',async()=>{
-    axios.post("http://localhost:8080/saveExcelToServer",hot.getData()).then(result => {
+    let ipAddr = window.location.hostname;
+    axios.post(`http://${ipAddr}:8080/saveExcelToServer`,hot.getData()).then(result => {
         console.log(result.data);
     });
 });

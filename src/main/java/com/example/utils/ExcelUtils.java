@@ -6,6 +6,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.WritableResource;
 
 import java.io.*;
 import java.util.*;
@@ -41,19 +44,20 @@ public class ExcelUtils {
                 }
             }
             // Write the workbook to a file
-            FileOutputStream fileOut = new FileOutputStream(path);
+            WritableResource resource = new FileSystemResource(path);
+            OutputStream fileOut = resource.getOutputStream();
             workbook.write(fileOut);
             fileOut.close();
             workbook.close();
-            System.out.println(TimeUtils.getCurrentTime()+"Excel file created and saved at " + path);
+            System.out.println(TimeUtils.getCurrentTime() + "Excel file created and saved at " + path);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
     }
 
-
-    public static String excelToJson(String filepath) throws IOException {
-        FileInputStream inputStream = new FileInputStream(filepath);
+    public static String excelToJson(String filePath) throws IOException {
+        Resource resource = new FileSystemResource(filePath);
+        InputStream inputStream = resource.getInputStream();
         Workbook workbook = new XSSFWorkbook(inputStream);
         Sheet sheet = workbook.getSheetAt(0);
         List<List<String>> data = new ArrayList<>();
