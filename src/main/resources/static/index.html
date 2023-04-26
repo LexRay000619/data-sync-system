@@ -3,10 +3,11 @@
 <head>
     <title>Display and Edit Excel File in Web Page</title>
     <link rel="icon" href="icons/njupt-favicon.ico" type="image/x-icon">
-    <script src="js/xlsx.full.min.js"></script>
-    <link rel="stylesheet" href="css/handsontable.full.css">
-    <script src="js/handsontable.full.js"></script>
-    <script src="js/axios.min.js"></script>
+    <!--当部署到云服务器上时,这种巨大的第三方库文件用CDN更快-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable@9.0.2/dist/handsontable.full.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handsontable@9.0.2/dist/handsontable.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="js/app.js" defer></script><!--defer属性规定该js代码在HTML文档加载完毕后再执行,避免空指针异常-->
 </head>
 <body>
