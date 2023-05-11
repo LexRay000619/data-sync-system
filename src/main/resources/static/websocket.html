@@ -2,30 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
     <link rel="icon" href="icons/njupt-favicon.ico" type="image/x-icon">
     <title>WebSocket Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
         let socket;
         let ipAddr = window.location.hostname;
-        if (typeof (WebSocket) == "undefined") {
-            console.log("您的浏览器不支持WebSocket");
-        } else {
-            console.log("您的浏览器支持WebSocket");
-            socket = new WebSocket(`ws://${ipAddr}:8080/websocket/1`);
-            socket.onopen = function () {
-                console.log("Socket已打开");
-                socket.send("这是来自客户端的消息:" + location.href + new Date());
-            };
-            socket.onmessage = function (msg) {
-                console.log(msg.data);
-            };
-            socket.onclose = function () {
-                console.log("Socket已关闭");
-            };
-            socket.onerror = function () {
-                alert("Socket发生了错误");
-            };
+        let id = 0;
+        axios.get(`http://${ipAddr}:8080/websocket/getId`).then(result => {
+            id = result.data;
+            createWebSocketConnection();
+        });
+
+        function createWebSocketConnection() {
+            if (typeof (WebSocket) == "undefined") {
+                console.log("您的浏览器不支持WebSocket");
+            } else {
+                console.log("您的浏览器支持WebSocket");
+                socket = new WebSocket(`ws://${ipAddr}:8080/websocket/${id}`);
+                socket.onopen = function () {
+                    console.log("WebSocket连接建立成功,id为:" + id);
+                    socket.send("新的连接已建立,id为:" + id);
+                };
+                socket.onmessage = function (msg) {
+                    console.log(msg.data);
+                };
+                socket.onclose = function () {
+                    console.log("WebSocket连接已关闭");
+                };
+                socket.onerror = function () {
+                    alert("WebSocket连接发生了错误");
+                };
+            }
         }
     </script>
 </head>
