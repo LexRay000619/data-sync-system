@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File List</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<h2>File List</h2>
+<form id="fileSelectionForm" action="/process-file" method="post">
+    <ul id="fileList"></ul>
+</form>
+<button id="submitButton" type="button">Select File</button>
+
+<script>
+    let ipAddr = window.location.hostname;
+    axios.get(`http://${ipAddr}:8080/getExcelFileList`)
+        .then(response => {
+            const files = response.data;
+            const fileListElement = document.getElementById("fileList");
+
+            files.forEach(file => {
+                const listItem = document.createElement("li");
+                const radioInput = document.createElement("input");
+                radioInput.type = "radio";
+                radioInput.name = "selectedFile";
+                radioInput.value = file;
+
+                const label = document.createElement("label");
+                label.appendChild(radioInput);
+                label.appendChild(document.createTextNode(file));
+
+                listItem.appendChild(label);
+                fileListElement.appendChild(listItem);
+            });
+        })
+        .catch(error => {
+            console.error("Error retrieving file list:", error);
+        });
+</script>
+<script>
+    const submitButton = document.getElementById("submitButton");
+    submitButton.addEventListener("click", validateAndSubmitForm);
+
+    function validateAndSubmitForm() {
+        const radioInputs = document.getElementsByName("selectedFile");
+        let selectedFile = "";
+
+        for (let i = 0; i < radioInputs.length; i++) {
+            if (radioInputs[i].checked) {
+                selectedFile = radioInputs[i].value;
+                break;
+            }
+        }
+
+        if (!selectedFile) {
+            alert("Please select a file");
+        } else {
+            const fileSelectionForm = document.getElementById("fileSelectionForm");
+            fileSelectionForm.submit();
+        }
+    }
+</script>
+
+</body>
+</html>
