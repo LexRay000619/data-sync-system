@@ -29,7 +29,7 @@ public class WebSocketServer {
     /**
      * 静态变量,线程安全的Set,存放每个客户端对应的MyWebSocket对象
      */
-    private static CopyOnWriteArraySet<WebSocketServer> webSocketSet = new CopyOnWriteArraySet<>();
+    public static CopyOnWriteArraySet<WebSocketServer> webSocketSet = new CopyOnWriteArraySet<>();
 
     private Session session;
 
@@ -63,7 +63,7 @@ public class WebSocketServer {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        log.info("收到来自窗口" + sid + "的信息: \"" + message + "\"");
+        log.info("收到来自窗口" + sid + "的信息: \"" + message + "\"(已广播至所有客户端)");
         for (WebSocketServer item : webSocketSet) {
             try {
                 item.sendMessage("全服广播: \"" + message + "\"(来自客户端" + sid + ")");
@@ -139,5 +139,9 @@ public class WebSocketServer {
         int result = session != null ? session.hashCode() : 0;
         result = 31 * result + (sid != null ? sid.hashCode() : 0);
         return result;
+    }
+
+    public String getSid() {
+        return sid;
     }
 }

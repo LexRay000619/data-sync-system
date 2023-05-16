@@ -1,6 +1,8 @@
 package com.example.utils;
 
 import com.google.gson.Gson;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,6 +20,8 @@ import java.util.*;
  * @author Lex
  */
 public class ExcelUtils {
+    static Log log = LogFactory.getLog(ExcelUtils.class);
+
     public static void convertStringToExcel(String excelString, String path) {
         try {
             // Convert string to JSONArray
@@ -49,7 +53,7 @@ public class ExcelUtils {
             workbook.write(fileOut);
             fileOut.close();
             workbook.close();
-            System.out.println(TimeUtils.getCurrentTime() + "Excel file created and saved at " + path);
+            log.info("Excel file created and saved at " + path);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }

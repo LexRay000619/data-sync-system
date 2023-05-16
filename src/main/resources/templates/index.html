@@ -8,7 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/handsontable@9.0.2/dist/handsontable.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="../static/js/app.js" defer></script><!--defer属性规定该js代码在HTML文档加载完毕后再执行,避免空指针异常-->
+    <script src="../static/js/websocket.js" type="module"></script>
+    <script src="../static/js/app.js" type="module" defer></script><!--defer属性规定该js代码在HTML文档加载完毕后再执行,避免空指针异常-->
 </head>
 <body>
     <input type="file" id="file-input" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
@@ -19,5 +20,11 @@
     <div id="hot"></div>
     <a href="/websocket">WebSocket Page</a>
     <a href="/file-list">File List</a>
+    <br/>
+    <form >
+        <label for="textInput">Enter Text:</label>
+        <input type="text" id="textInput" name="textInput">
+        <button type="button" id="send-btn">Send</button>
+    </form>
 </body>
 </html>

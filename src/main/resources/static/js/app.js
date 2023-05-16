@@ -1,7 +1,7 @@
 let hot;
 
 const fileInput = document.getElementById('file-input');
-const editBtn = document.getElementById('edit-btn');
+export const editBtn = document.getElementById('edit-btn');
 const exportBtn = document.getElementById('export-btn');
 const saveBtn = document.getElementById('save-btn');
 const loadBtn = document.getElementById('load-btn');
@@ -17,7 +17,7 @@ fileInput.addEventListener('change', (event) => {
         return;
     }
     // 选择新文件后,先清屏
-    document.getElementById('hot').innerHTML="";
+    document.getElementById('hot').innerHTML = "";
 
     const file = event.target.files[0]; // file为用户点击按钮后选择的第一个文件,其内容后续会被FileReader读取
     const reader = new FileReader();
@@ -50,12 +50,12 @@ fileInput.addEventListener('change', (event) => {
     reader.readAsArrayBuffer(file);
 });
 
-loadBtn.addEventListener('click',()=>{
-    document.getElementById('hot').innerHTML="";
+export function loadExcelData() {
+    document.getElementById('hot').innerHTML = "";
 
     let jsonData;
     let ipAddr = window.location.hostname;
-    axios.get(`http://${ipAddr}:8080/getJsonStringFromServer`).then(result =>{
+    axios.get(`http://${ipAddr}:8080/getJsonStringFromServer`).then(result => {
         console.log('The initial excel table data from the server side has been successfully obtained.');
         jsonData = result.data;
         hot = new Handsontable(document.getElementById('hot'), {
@@ -76,10 +76,14 @@ loadBtn.addEventListener('click',()=>{
             licenseKey: 'non-commercial-and-evaluation'
         });
         // 只有当excel文件展示在页面上之后,才能进行编辑、导出、云端保存等操作
-        editBtn.disabled=false;
-        saveBtn.disabled=false;
-        exportBtn.disabled=false;
+        editBtn.disabled = false;
+        saveBtn.disabled = false;
+        exportBtn.disabled = false;
     });
+}
+
+loadBtn.addEventListener('click', () => {
+    loadExcelData();
 });
 
 editBtn.addEventListener('click', () => {   // 切换按钮的模式,设置全表是否可编辑
@@ -116,9 +120,9 @@ function exportAsExcelFile(buffer, fileName) {
     window.URL.revokeObjectURL(url);    // 撤销临时URL以释放内存
 }
 
-saveBtn.addEventListener('click',async()=>{
+saveBtn.addEventListener('click', async () => {
     let ipAddr = window.location.hostname;
-    axios.post(`http://${ipAddr}:8080/saveExcelToServer`,hot.getData()).then(result => {
+    axios.post(`http://${ipAddr}:8080/saveExcelToServer`, hot.getData()).then(result => {
         console.log(result.data);
     });
 });
